@@ -147,7 +147,7 @@ function template(source) {
   var cachedTemplate = Mustache.parse(source);
   return function(data, partials) {
     return getElementsFromDom(
-      Mustache.render(cachedTemplate, data, partials),
+      Mustache.render(source, data, partials),
       'attr',
       'data-doomify');
   };
