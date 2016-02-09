@@ -143,13 +143,18 @@ function doomify(file, opts) {
   return new Doomify(opts);
 }
 
+function contextualFragmentToTemplate(fragment) {
+  var retval = fragment.children;
+  return objectAssign(retval, fragment.noi);
+}
+
 function template(source) {
   var cachedTemplate = Mustache.parse(source);
   return function(data, partials) {
-    return getElementsFromDom(
+    return contextualFragmentToTemplate(getElementsFromDom(
       Mustache.render(source, data, partials),
       'attr',
-      'data-doomify');
+      'data-doomify'));
   };
 }
 
