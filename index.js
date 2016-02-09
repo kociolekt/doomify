@@ -48,7 +48,7 @@ function getElementsFromDom(dom, type, name) {
     elems = dom.querySelectorAll('[' + name + ']');
   } else if (type === 'class') {
     // todo selector, po co podwójny
-    elems = dom.querySelectorAll('[class^="' + name + '-"], [class*=" ' + name + '-"]')
+    elems = dom.querySelectorAll('[class^="' + name + '-"], [class*=" ' + name + '-"]');
   } else {
     throw new Error('type "' + type + '" unsupported');
   }
