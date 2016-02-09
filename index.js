@@ -18,14 +18,14 @@ if (
 // without additional div
 function getDocumentFragmentFromString(html) {
   // return document.createRange().createContextualFragment(html); // FU safari
-  let range = document.createRange();
+  var range = document.createRange();
   range.selectNode(document.body); // safari
   return range.createContextualFragment(html);
 }
 
 function getElementsFromDom(dom, type, name) {
 
-  let elems;
+  var elems;
 
   if (!name) throw new Error('no-name not allowed');
 
@@ -51,9 +51,9 @@ function getElementsFromDom(dom, type, name) {
     throw new Error('type "' + type + '" unsupported');
   }
 
-  Array.from(elems).forEach(e => {
+  Array.from(elems).forEach(function(e){
 
-    let letName;
+    var letName;
 
     if (type === 'data' || type === 'attr') {
       letName = e.getAttribute(name);
