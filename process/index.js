@@ -1,5 +1,6 @@
-var Mustache = require('mustache');
-var objectAssign = require('object-assign');
+var
+  Mustache = require('mustache'),
+  objectAssign = require('object-assign');
 
 // ie 9, ie 10
 if (
@@ -25,8 +26,9 @@ function getDocumentFragmentFromString(html) {
 }
 
 function getElementsFromDom(dom, type, name) {
-
-  var elems;
+  var
+    pairs = {},
+    elements;
 
   if (!name) throw new Error('no-name not allowed');
 
@@ -39,50 +41,42 @@ function getElementsFromDom(dom, type, name) {
     throw new Error('string or DOM node');
   }
 
-  // nodes of interest :)
-  dom.noi = {};
-
   if (type === 'data') name = 'data-' + name;
 
   if (type === 'data' || type === 'attr') {
-    elems = dom.querySelectorAll('[' + name + ']');
+    elements = dom.querySelectorAll('[' + name + ']');
   } else if (type === 'class') {
-    elems = dom.querySelectorAll('[class*="' + name + '-"]');
+    elements = dom.querySelectorAll('[class*="' + name + '-"]');
   } else {
     throw new Error('type "' + type + '" unsupported');
   }
 
-  Array.from(elems).forEach(function(e){
-
-    var letName;
+  for(var i = 0, eLen = elements.length; i < eLen; i++) {
+    var
+      element = elements[i],
+      key;
 
     if (type === 'data' || type === 'attr') {
-      letName = e.getAttribute(name);
+      key = element.getAttribute(name);
     } else {
-      letName = e.className.match(new RegExp(name + '-' + '((-?\\w+)+)'));
-      if (letName && letName.length) letName = letName[1];
+      key = element.className.match(new RegExp(name + '-' + '((-?\\w+)+)'));
+      if (key && key.length) key = key[1];
     }
 
-    if (!letName) return;
-    if (!dom.noi[letName]) dom.noi[letName] = [];
-    if (dom.noi[letName]) dom.noi[letName].push(e);
+    if (!key) continue;
+    if (!pairs[key]) pairs[key] = [];
+    if (pairs[key]) pairs[key].push(element);
+  }
 
-  });
-
-  return dom;
-}
-
-function contextualFragmentToTemplate(fragment) {
-  var retval = fragment.children;
-  return objectAssign(retval, fragment.noi);
+  return objectAssign(dom.children, pairs);
 }
 
 function process(source) {
   return function(data, partials) {
-    return contextualFragmentToTemplate(getElementsFromDom(
-      Mustache.render(source, data, partials),
-      'attr',
-      'data-doomify'));
+    var
+      template = Mustache.render(source, data, partials),
+      fragment = getElementsFromDom(template, 'attr', 'data-doomify');
+    return fragment;
   };
 }
 
