@@ -1,4 +1,21 @@
-var jstify = require('jstify');
+var minify = require('html-minifier').minify;
+var Mustache = require('mustache');
+
+function compile(str, minifierOpts) {
+  var minified = minifierOpts === false ? str : minify(str, minifierOpts);
+  return minified;
+}
+
+function wrap(source) {
+  return 'var doomify = require(\'doomify\');\n' +
+    'module.exports = doomify(' + source + ');';
+}
+
+function transform(src, opts) {
+  var compiled = compile(src, opts.noMinify ? false : opts.minifierOpts);
+  var body = wrap(compiled);
+  return body;
+}
 
 // ie 9, ie 10
 if (
@@ -71,14 +88,17 @@ function getElementsFromDom(dom, type, name) {
   return dom;
 }
 
-function compile(str, minifierOpts, templateOpts) {
-  return getElementsFromDom(
-    jstify.compile(str, minifierOpts, templateOpts),
-    'attr',
-    'data-doomify');
+function doomify(source) {
+  var template = Mustache.parse(source);
+  return function(data, partials) {
+    return getElementsFromDom(
+      Mustache.render(template, data, partials),
+      'attr',
+      'data-doomify');
+  };
 }
 
-module.exports = jstify;
+module.exports = doomify;
 module.exports.compile = compile;
-module.exports.wrap = jstify.wrap;
-module.exports.transform = jstify.transform;
+module.exports.wrap = wrap;
+module.exports.transform = transform;

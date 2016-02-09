@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/kociolekt/doomify#readme",
   "dependencies": {
-    "jstify": "^0.13.0"
+    "html-minifier": "^1.1.1",
+    "mustache": "^2.2.1"
   }
 }
