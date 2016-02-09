@@ -1,0 +1,26 @@
+{
+  "name": "doomify",
+  "version": "1.0.0",
+  "description": "Templates autoselecting dom elements. Based on jstify.",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kociolekt/doomify.git"
+  },
+  "keywords": [
+    "template",
+    "dom",
+    "html"
+  ],
+  "author": "Tomek",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kociolekt/doomify/issues"
+  },
+  "homepage": "https://github.com/kociolekt/doomify#readme",
+  "dependencies": {
+    "jstify": "^0.13.0"
+  }
+}
