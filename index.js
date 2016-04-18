@@ -18,9 +18,13 @@ var DEFAULTS = {
 };
 
 function compile(str, minifierOpts) {
-  var minified = minifierOpts === false ? str : minify(str, minifierOpts);
-  Mustache.parse(minified);
-  return minified;
+  var compiled = minifierOpts === false
+    ? str.replace(/(\r\n|\n|\r)/gm,'') // Remove new lines
+    : minify(str, minifierOpts);
+
+  Mustache.parse(compiled);
+
+  return compiled;
 }
 
 function wrap(source) {
